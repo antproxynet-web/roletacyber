@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - Roleta de Animes</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="main.css">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log('Service Worker registrado!'));
+        }
+    </script>
+</head>
+<body data-theme="classic">
+    <div class="settings-container">
+        <div class="settings-header">
+            <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+            </svg>
+            <h1>Configurações</h1>
+        </div>
+
+        <div class="settings-content">
+            <!-- Seção de Temas -->
+            <div class="settings-section">
+                <h2>
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 7 15.5 7 14 7.67 14 8.5s.67 1.5 1.5 1.5z"/>
+                    </svg>
+                    Seletor de Temas
+                </h2>
+                <div class="theme-grid">
+                    <button class="theme-btn" data-theme="classic" onclick="changeTheme('classic')">Classic</button>
+                    <button class="theme-btn" data-theme="purple-haze" onclick="changeTheme('purple-haze')">Purple Haze</button>
+                    <button class="theme-btn" data-theme="toxic-green" onclick="changeTheme('toxic-green')">Toxic Green</button>
+                    <button class="theme-btn" data-theme="hot-red" onclick="changeTheme('hot-red')">Hot Red</button>
+                    <button class="theme-btn" data-theme="ice-blue" onclick="changeTheme('ice-blue')">Ice Blue</button>
+                    <button class="theme-btn" data-theme="golden-sunset" onclick="changeTheme('golden-sunset')">Golden</button>
+                    <button class="theme-btn" data-theme="neon-pink" onclick="changeTheme('neon-pink')">Neon Pink</button>
+                    <button class="theme-btn" data-theme="ocean-wave" onclick="changeTheme('ocean-wave')">Ocean Wave</button>
+                    <button class="theme-btn" data-theme="forest-night" onclick="changeTheme('forest-night')">Forest Night</button>
+                    <button class="theme-btn" data-theme="sunset-fire" onclick="changeTheme('sunset-fire')">Sunset Fire</button>
+                    <button class="theme-btn" data-theme="cyber-purple" onclick="changeTheme('cyber-purple')">Cyber Purple</button>
+                    <button class="theme-btn" data-theme="mint-fresh" onclick="changeTheme('mint-fresh')">Mint Fresh</button>
+                    <button class="theme-btn" data-theme="deep-space" onclick="changeTheme('deep-space')">Deep Space</button>
+                    <button class="theme-btn" data-theme="cherry-blossom" onclick="changeTheme('cherry-blossom')">Cherry Blossom</button>
+                    <button class="theme-btn" data-theme="electric-storm" onclick="changeTheme('electric-storm')">Electric Storm</button>
+                    <button class="theme-btn" data-theme="mystic-aurora" onclick="changeTheme('mystic-aurora')">Mystic Aurora</button>
+                </div>
+            </div>
+
+            <!-- Seção de Gerenciamento de Roletas -->
+            <div class="settings-section">
+                <h2>
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    </svg>
+                    Gerenciamento de Roletas
+                </h2>
+                <div class="settings-group">
+                    <label for="newWheelName">Nome da Nova Roleta:</label>
+                    <input type="text" id="newWheelName" placeholder="Ex: Animes Favoritos">
+                    <button class="btn btn-add" onclick="createNewWheelFromSettings()">
+                        <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        <span>Criar Nova Roleta</span>
+                    </button>
+                </div>
+                
+                <div class="settings-group">
+                    <label>Roleta Atual:</label>
+                    <span id="currentWheelNameDisplay" style="font-weight: bold; color: var(--primary-color);"></span>
+                </div>
+
+                <h3>Roletas Salvas</h3>
+                <div class="wheel-list" id="wheelList">
+                    <!-- Roletas serão inseridas aqui -->
+                </div>
+            </div>
+
+            <!-- Seção de Configurações Gerais -->
+            <div class="settings-section">
+                <h2>
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    </svg>
+                    Geral
+                </h2>
+                <div class="settings-group">
+                    <label for="noGlowToggle">Remover Brilho/Sombras dos Temas</label>
+                    <label class="switch">
+                        <input type="checkbox" id="noGlowToggle" onchange="toggleNoGlow(this.checked)">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            
+
+            <!-- Botões de Ação -->
+            <div class="nav-buttons">
+                <a href="index.html" class="btn-back">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                    Voltar
+                </a>
+                <button class="btn-save" onclick="saveSettings()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                    </svg>
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>

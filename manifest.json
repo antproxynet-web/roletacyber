@@ -1,0 +1,17 @@
+{
+  "name": "Roleta Cyberpunk",
+  "short_name": "Roleta",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0A0018",
+  "theme_color": "#ff00ff",
+  "icons": [
+    {
+      "src": "icone.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle"]
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roleta de Animes - Cyberpunk</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="main.css">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log('Service Worker registrado!'));
+        }
+    </script>
+</head>
+<body data-theme="classic">
+    <div class="container">
+        <div class="header">
+            <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 2.18l8 3.6v7.22c0 4.39-3.02 8.49-8 9.74-4.98-1.25-8-5.35-8-9.74V7.78l8-3.6zM12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 2c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
+            </svg>
+            <h1 id="wheelName">Roleta das Decisões</h1>
+            <svg class="header-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 2.18l8 3.6v7.22c0 4.39-3.02 8.49-8 9.74-4.98-1.25-8-5.35-8-9.74V7.78l8-3.6zM12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 2c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
+            </svg>
+        </div>
+
+        <div class="main-content">
+            <div class="wheel-section">
+                <div class="wheel-header">
+                    <button class="btn-icon-only" id="toggleViewBtn" onclick="toggleView()" title="Alternar para Lista">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon-only" onclick="saveCurrentWheel()" title="Salvar Roleta">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon-only" id="manageWheelsBtn" onclick="openManageWheelsPopup()" title="Gerenciar Roletas">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon-only" id="importExportBtn" onclick="openImportExportPopup()" title="Importar/Exportar">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                            <path d="M16 18H8v-2h8v2zm0-4H8v-2h8v2z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="wheel-container" id="wheelContainer">
+                    <div class="pointer"></div>
+                    <canvas id="wheelCanvas" width="500" height="500"></canvas>
+                    <div class="center-circle">SPIN</div>
+                </div>
+                <button class="btn btn-spin" id="spinBtn" onclick="spin()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                    </svg>
+                    <span>Girar Roleta</span>
+                </button>
+                <div class="result" id="result">
+                    <h3>Anime Sorteado:</h3>
+                    <p id="resultText"></p>
+                </div>
+                <div class="list-view" id="listView" style="display: none;">
+                    <h3>Lista de Animes</h3>
+                    <div class="anime-list-view" id="animeListView"></div>
+                </div>
+            </div>
+
+            <div class="controls-panel">
+                <h2>
+                    <svg class="controls-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                    </svg>
+                    Gerenciar Animes
+                </h2>
+
+                <div class="input-group">
+                    <label for="animeInput">Adicionar Animes (separe por vírgula):</label>
+                    <input type="text" id="animeInput" placeholder="Ex: Naruto, Demon Slayer, Bungou Stray Dogs...">
+                </div>
+                <button class="btn btn-add" onclick="addAnime()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                    <span>Adicionar</span>
+                </button>
+                <button class="btn btn-clear" onclick="clearAll()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                    </svg>
+                    <span>Limpar Todos</span>
+                </button>
+
+                <div class="anime-list" id="animeList"></div>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-secondary);">
+                    <a href="configuracoes.html" class="btn" style="display: block; text-align: center; text-decoration: none;">
+                        <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                        </svg>
+                        <span>Configurações</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="spinSound" src="roleta.mp3" preload="auto"></audio>
+
+    <!-- Pop-up de Gerenciamento de Roletas -->
+    <div class="modal-overlay" id="manageWheelsModal" style="display: none;">
+        <div class="modal-content">
+            <h2>Gerenciar Roletas</h2>
+            <div class="settings-group">
+                <label for="newWheelName">Nome da Nova Roleta:</label>
+                    <input type="text" id="newWheelName" placeholder="Ex: Animes Favoritos">
+                <button class="btn btn-add" onclick="promptNewWheel()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                    <span>Criar Nova Roleta</span>
+                </button>
+            </div>
+            
+            <h3>Roletas Salvas</h3>
+            <div class="wheel-list" id="wheelList">
+                <!-- Roletas serão inseridas aqui -->
+            </div>
+
+            <button class="btn-close" onclick="closeManageWheelsPopup()">✕</button>
+        </div>
+    </div>
+
+    <!-- Pop-up de Importar/Exportar -->
+    <div class="modal-overlay" id="importExportModal" style="display: none;">
+        <div class="modal-content">
+            <h2>Importar / Exportar</h2>
+            <div class="modal-buttons">
+                <button class="btn" onclick="exportAnimes()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2z"/>
+                        <path d="M5 9l1.41 1.41L11 4.83V15h2V4.83l4.59 4.58L19 8l-7-7-7 7z"/>
+                    </svg>
+                    <span>Exportar</span>
+                </button>
+                <button class="btn" onclick="triggerImportFile()">
+                    <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2z"/>
+                        <path d="M11 3L5.5 8.5l1.42 1.41L11 5.83V15h2V5.83l4.08 4.08L18.5 8.5z"/>
+                    </svg>
+                    <span>Importar</span>
+                </button>
+            </div>
+            <button class="btn-close" onclick="closeImportExportPopup()">✕</button>
+        </div>
+    </div>
+
+    <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importAnimes(event)">
+
+    <script src="main.js"></script>
+</body>
+</html>
