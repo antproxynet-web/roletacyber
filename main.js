@@ -50,27 +50,6 @@ function loadSettings() {
         currentWheelId = 'default';
         currentWheelName = 'Roleta Padrão';
         animes = [
-            "bleach",
-            "JoJo's Bizarre Adventure",
-            "Solo Leveling",
-            "Don't Toy with Me, Miss Nagatoro",
-            "Banana Fish",
-            "Sabikui Bisco",
-            "Chainsaw Man",
-            "Kakegurui",
-            "Parasyte: The Maxim",
-            "Tokyo Revengers",
-            "Hajime no Ippo",
-            "Baki",
-            "Wonder Egg Priority",
-            "Erased",
-            "Blue Lock",
-            "Bungou Stray Dogs",
-            "Kaiju No. 8",
-            "The Promised Neverland",
-            "SPY×FAMILY",
-            "The Founder of Diabolism",
-            "Sonic X"
         ];
         animeImages = {};
         saveCurrentWheel(); // Salva a roleta padrão
